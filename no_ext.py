@@ -11,9 +11,8 @@ def W(x):
     return lambertw(x).real
 
 def dfdx(x, c1):
-    """Derivative of f(x) with respect to x"""
     xi = np.sqrt(2 * (np.log(x + 1) - c1 + 1))
-    return 1 / (W(np.exp(xi**2/2 + c1 - 1)) + 1)
+    return 2 / (W(np.exp(xi**2/2 + c1 - 1)) + 1) - 1
 
 class FluidFlow(torch.nn.Module):
     def __init__(self, grid_size, c1):
@@ -52,7 +51,6 @@ class FluidFlow(torch.nn.Module):
        
         # Apply boundary conditions
         grid_np[0, :] = grid_np[-1, :] = grid_np[:, 0] = grid_np[:, -1] = 0.0
-       
         self.grid = torch.tensor(grid_np, device=device)
    
     def run_simulation(self, steps, dt):
